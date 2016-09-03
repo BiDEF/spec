@@ -42,17 +42,31 @@ by the type or encoded explicitly as part of the type.
 		+-----------+
 		|0 000 ssss | (see table of symbols below)
 		+-----------+
+		
+  Symbols are type and value in a single byte.
 
-Tag symbol (is followed by a complete tag-value pair):
+ `ssss` | Symbol    | `ssss`| Symbol
+ ------ | --------- |------ | --------- |
+ `0000` | numeric 0 | `1000` | numeric 8
+ `0001` | numeric 1 | `1001` | numeric 9
+ `0010` | numeric 2 | `1010` | `null`
+ `0011` | numeric 3 | `1011` | `undefined`
+ `0100` | numeric 4 | `1100` | `false`
+ `0101` | numeric 5 | `1101` | `true`
+ `0110` | numeric 6 | `1110` | `dynamic`
+ `0111` | numeric 7 | `1111` | `tag` 
+ 
+  The `dynamic` type is used for array element types or record field types to indicate that the type is explicitly encoded for each value. When `dynamic` is used as a top level type the receiver is asked to interprete the value bits/bytes and determine the target type from it.
+
+  The `tag` symbol is followed by the type-value pair for the tag data.
 
 		+-----------+-------------    --+===========    ==+
 		|0 000 1111 | tag's type / * /  | tag data / * /  |
 		+-----------+------------    ---+==========    ===+
 
- Tags can be attached to any type including array
- element and record field types as well as dynamic
- types. This allows foreign language type tags or
- property names etcetera. 
+ * Tags precede the type they are attached to. 
+ * Multiple tags follow each other before the type they all are attached to.
+ * Tags can be attached to any type including array element and record field types as well as dynamic types.
 
 **1 Bits**:
 
@@ -119,25 +133,6 @@ Tag symbol (is followed by a complete tag-value pair):
   The ids `1xxxxxxx` or `x1111111` should not be used as they cannot be referenced.
   It is however not illegal to do so. The receiver is free to ignore such definitions or do some custom interpretation that might be meaningful between particular senders and receivers.
 
-Table of Symbols
-----------------
-
-		 0 0000 numeric 0
-		 1 0001 numeric 1
-		 2 0010 numeric 2
-		 3 0011 numeric 3
-		 4 0100 numeric 4
-		 5 0101 numeric 5
-		 6 0110 numeric 6
-		 7 0111 numeric 7
-		 8 1000 numeric 8
-		 9 1001 numeric 9
-		10 1010 null
-		11 1011 undefined
-		12 1100 false
-		13 1101	true
-		14 1110	dynamic (marks elements within arrays and records as explicitly encoded for each value)
-		15 1111 tag (followed by a complete type-value pair that is meant to be attached)
 
 Messages
 --------
