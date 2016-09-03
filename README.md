@@ -14,12 +14,12 @@ The format has 8 base types:
 7. `array`
 8. `record`
 
-_Binary_ would be an `array` of `uint` of 1 byte width. 
-A _text_ or _string_ is an `array` of `char`s or in case of UTF-8 _binary_.
-An _object_ is a `record` with tagged field types for the field names.
-A _map_ could be a `record` with a keys `array` and values `array`.
-A _date_ could be a `uint` with 8 bytes width or a `record` of day, month and year.
-A _fraction_ could be a `record` of an `int` numerator and an `uint` denominator.
+* _Binary_ would be an `array` of `uint` of 1 byte width. 
+* A _text_ or _string_ is an `array` of `char`s or in case of UTF-8 _binary_.
+* An _object_ is a `record` with tagged field types for the field names.
+* A _map_ could be a `record` with a keys `array` and values `array`.
+* A _date_ could be a `uint` with 8 bytes width or a `record` of day, month and year.
+* A _fraction_ could be a `record` of an `int` numerator and an `uint` denominator.
 
 Data Encoding
 -------------
