@@ -14,7 +14,7 @@ The format has 8 base types:
 7. `array`
 8. `record`
 
-* A _boolean_ is a single `bits`
+* A _boolean_ equals `bits` with 1 byte using 1 bit.
 * _Binary_ would be an `array` of `uint` of 1 byte width. 
 * A _text_ or _string_ is an `array` of `char`s or in case of UTF-8 _binary_.
 * An _object_ is a `record` with tagged field types for the field names.
