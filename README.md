@@ -22,6 +22,14 @@ The format has 8 base types:
 * A _date_ could be a `uint` with 8 bytes width or a `record` of day, month and year.
 * A _fraction_ could be a `record` of an `int` numerator and an `uint` denominator.
 
+Design Goals
+------------
+* Rich user defined types (for expressive self-describing data)
+* Reduce (re)occurance of full types (for small message size)
+* Any possible message is formally correct by design (to not have to validate on a non-semantic level)
+* Stable for all future (no versioning, no build in special purpose types that might be "standard" today)
+* Statically (type once) and dynamically typed (type for each value) data can be mixed freely
+
 Encoding
 --------
 Data is described by a pair of a type followed by a value.
@@ -37,7 +45,7 @@ The count of value bytes is either a fix number given
 by the type or encoded explicitly as part of the type.
 
 
-**0 Symbols**:
+#### Symbols
 
 		+-----------+
 		|0 000 ssss | (see table of symbols below)
@@ -56,6 +64,8 @@ by the type or encoded explicitly as part of the type.
  `0110` | numeric 6 | `1110` | `dynamic`
  `0111` | numeric 7 | `1111` | `tag` 
  
+  The symbols `null`, `undefined`, `true` and `false` are only used in connection with `dynamic` or `v`arying typed values.
+ 
   The `dynamic` type is used for array element types or record field types to indicate that the type is explicitly encoded for each value. When `dynamic` is used as a top level type the receiver is asked to interprete the value bits/bytes and determine the target type from it.
 
   The `tag` symbol is followed by the type-value pair for the tag data.
@@ -68,53 +78,62 @@ by the type or encoded explicitly as part of the type.
  * Multiple tags follow each other before the type they all are attached to.
  * Tags can be attached to any type including array element and record field types as well as dynamic types.
 
-**1 Bits**:
+#### Bits
 
 		+-----------+------------+=======        ==+
 		|0 001 v bbb| data bytes | data / 1-255 /  |
 		+-----------+------------+======        ===+
 
-`bool` is equal to `bits(1)`, this type is encoded as `0 001 0 001  0000001`.
+* `bool` is equal to `bits(1)` what i is encoded as `00010001 0000001`. 
+* the `bits` value for _true_ is `00000001`.
+* the `bits` value for _false_ is `00000000`.
 
-**2 Unsigned Integers**:
+#### Unsigned Integers
 
 		+-----------+=======      ==+
 		|0 010 v www| data / 1-8 /  |
 		+-----------+======      ===+
 
-**3 Signed Integers**:
+#### Signed Integers
 
 		+-----------+=======      ==+
 		|0 011 v www| data / 1-8 /  |
 		+-----------+======      ===+
 
-**4 Characters**:
+#### Characters
 
 		+-----------+=======      ==+
 		|0 100 v www| data / 1-8 /  |
 		+-----------+======      ===+
 
-**5 Decimals**:
+#### Decimals
 
 		+-----------+==============      ==+==========+
 		|0 101 v www| coefficient / 0-7 /  | exponent |
 		+-----------+=============      ===+==========+
 
-**6 Arrays**:
+#### Arrays
 
 		+-----------+---------------    --+---------      --+=======    ==+
 		|0 110 v lll| element type / * /  | length / 1-8 /  | data / * /  |
 		+-----------+--------------    ---+--------      ---+======    ===+
 
   Elements will only have an explicit type if the array is `v`arying or its element type is `dynamic`.
+  
+  If a `v`arying array type is predefined and later referenced the element type is (re)stated explicitly for each value.
+  This allows to change details of the element type like the width or if it is varying.
 
-**7 Records**:
+#### Records
 
 		+-----------+---------      --+--------------    --+=======    ==+
 		|0 111 v lll| fields / 1-8 /  | field types / * /  | data / * /  |
 		+-----------+--------      ---+-------------    ---+======    ===+
 
-  Fields will only have an explicit type if the array is `v`arying or its element type is `dynamic`.
+  When the record type is predefined and later referenced only those fields will have an explicit type that are `v`arying or `dynamic`. 
+  
+  If the whole record is `v`arying the field types are not part of the type definition but repeated before each value.
+  This is used to as a form of _union_ type.
+  
 
 **Type Reference**:
 
