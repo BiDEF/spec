@@ -30,7 +30,7 @@ The count of value bytes is either a fix number given
 by the type or encoded explicitly as part of the type.
 
 
-Symbols:
+**0 Symbols**:
 
 		+-----------+
 		|0 000 ssss | (see table of symbols below)
@@ -47,7 +47,7 @@ Tag symbol (is followed by a complete tag-value pair):
  types. This allows foreign language type tags or
  property names etcetera. 
 
-Bits:
+**1 Bits**:
 
 		+-----------+------------+=======        ==+
 		|0 001 v bbb| data bytes | data / 1-255 /  |
@@ -55,49 +55,49 @@ Bits:
 
 `bool` is equal to `bits(1)`, this type is encoded as `0 001 0 001  0000001`.
 
-Unsigned Integers:
+**2 Unsigned Integers**:
 
 		+-----------+=======      ==+
 		|0 010 v www| data / 1-8 /  |
 		+-----------+======      ===+
 
-Signed Integers:
+**3 Signed Integers**:
 
 		+-----------+=======      ==+
 		|0 011 v www| data / 1-8 /  |
 		+-----------+======      ===+
 
-Characters:
+**4 Characters**:
 
 		+-----------+=======      ==+
 		|0 100 v www| data / 1-8 /  |
 		+-----------+======      ===+
 
-Decimals:
+**5 Decimals**:
 
 		+-----------+==============      ==+==========+
 		|0 101 v www| coefficient / 0-7 /  | exponent |
 		+-----------+=============      ===+==========+
 
-Arrays:
+**6 Arrays**:
 
 		+-----------+---------------    --+---------      --+=======    ==+
 		|0 110 v lll| element type / * /  | length / 1-8 /  | data / * /  |
 		+-----------+--------------    ---+--------      ---+======    ===+
 
-Records:
+**7 Records**:
 
 		+-----------+---------      --+--------------    --+=======    ==+
 		|0 111 v lll| fields / 1-8 /  | field types / * /  | data / * /  |
 		+-----------+--------      ---+-------------    ---+======    ===+
 
-Type Reference (7 bit id):
+**Type Reference**:
 
 		+-----------+
-		|1 rrrrrrr  |
+		|1 rrrrrrr  | (7 bit id)
 		+-----------+
 
-Type Definition (followed by a type without a value!): 
+**Type Definition** (followed by a type without a value!): 
 
 		+-----------+-----------+============    ==+
 		|1 1111111  | 0 rrrrrrr |  type def / * /  |
