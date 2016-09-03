@@ -22,8 +22,8 @@ The format has 8 base types:
 * A _date_ could be a `uint` with 8 bytes width or a `record` of day, month and year.
 * A _fraction_ could be a `record` of an `int` numerator and an `uint` denominator.
 
-Data Encoding
--------------
+Encoding
+--------
 Data is described by a pair of a type followed by a value.
 
 		+-----------+===========+
@@ -92,11 +92,15 @@ Tag symbol (is followed by a complete tag-value pair):
 		|0 110 v lll| element type / * /  | length / 1-8 /  | data / * /  |
 		+-----------+--------------    ---+--------      ---+======    ===+
 
+  Elements will only have an explicit type if the array is `v`arying or its element type is `dynamic`.
+
 **7 Records**:
 
 		+-----------+---------      --+--------------    --+=======    ==+
 		|0 111 v lll| fields / 1-8 /  | field types / * /  | data / * /  |
 		+-----------+--------      ---+-------------    ---+======    ===+
+
+  Fields will only have an explicit type if the array is `v`arying or its element type is `dynamic`.
 
 **Type Reference**:
 
@@ -110,6 +114,10 @@ Tag symbol (is followed by a complete tag-value pair):
 		|1 1111111  | 0 rrrrrrr |  type def / * /  |
 		+-----------+-----------+===========    ===+
 
+  Defines a type with the given 7-bit id for the **duration of the session**.
+  A type might however be redefined during a session. 
+  The ids `1xxxxxxx` or `x1111111` should not be used as they cannot be referenced.
+  It is however not illegal to do so. The receiver is free to ignore such definitions or do some custom interpretation that might be meaningful between particular senders and receivers.
 
 Table of Symbols
 ----------------
@@ -130,6 +138,12 @@ Table of Symbols
 		13 1101	true
 		14 1110	dynamic (marks elements within arrays and records as explicitly encoded for each value)
 		15 1111 tag (followed by a complete type-value pair that is meant to be attached)
+
+Messages
+--------
+A message is a sequence of type-value pairs.
+It starts typically by some type definitions followed by one or more type-value pairs that reference to the previously defined types. But type definitions and usual typed values can be mixed at will.
+
 
 Dynamic Typing
 --------------
