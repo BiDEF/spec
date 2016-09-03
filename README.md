@@ -1,5 +1,14 @@
 # BiDEF - Binary Data Exchange Format
 
+Design Goals
+------------
+* Rich user defined types (for expressive self-describing data)
+* Reduce (re)occurance of full types (for small message size)
+* Stable for all future (no versioning, no build in special purpose types that might be "standard" today)
+* Any possible message is formally correct by design (to not have to validate on a non-semantic level)
+* Statically typed (type once) and dynamically typed (type for each value) data can be mixed freely
+
+
 Base Types
 ----------
 
@@ -22,13 +31,6 @@ The format has 8 base types:
 * A _date_ could be a `uint` with 8 bytes width or a `record` of day, month and year.
 * A _fraction_ could be a `record` of an `int` numerator and an `uint` denominator.
 
-Design Goals
-------------
-* Rich user defined types (for expressive self-describing data)
-* Reduce (re)occurance of full types (for small message size)
-* Any possible message is formally correct by design (to not have to validate on a non-semantic level)
-* Stable for all future (no versioning, no build in special purpose types that might be "standard" today)
-* Statically (type once) and dynamically typed (type for each value) data can be mixed freely
 
 Encoding
 --------
@@ -135,7 +137,7 @@ by the type or encoded explicitly as part of the type.
   This is used to as a form of _union_ type.
   
 
-**Type Reference**:
+#### Type Reference
 
 		+-----------+
 		|1 rrrrrrr  | (7 bit id)
