@@ -115,7 +115,7 @@ Tag symbol (is followed by a complete tag-value pair):
 		+-----------+-----------+===========    ===+
 
   Defines a type with the given 7-bit id for the **duration of the session**.
-  A type might however be redefined during a session. 
+  A type might however be redefined in any message during a session (including the same message that origianlly defined it first). 
   The ids `1xxxxxxx` or `x1111111` should not be used as they cannot be referenced.
   It is however not illegal to do so. The receiver is free to ignore such definitions or do some custom interpretation that might be meaningful between particular senders and receivers.
 
