@@ -68,7 +68,10 @@ by the type or encoded explicitly as part of the type.
  
   The symbols `null`, `undefined`, `true` and `false` are only used in connection with `dynamic` or `v`arying typed values.
  
-  The `dynamic` type is used for array element types or record field types to indicate that the type is explicitly encoded for each value. When `dynamic` is used as a top level type the receiver is asked to interprete the value bits/bytes and determine the target type from it.
+  The `dynamic` type is used for array element types or record field types to indicate that the type is explicitly encoded for each value. 
+  
+  When `dynamic` is used as a top level type (a type not further refined later) the value is by convention one byte long.
+  It is up to the receiver to make sense of it.
 
   The `tag` symbol is followed by the type-value pair for the tag data.
 
