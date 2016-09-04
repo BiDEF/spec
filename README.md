@@ -177,13 +177,21 @@ An `array` of `char` (say something like UTF-16 with 2 bytes per char) with one 
 		array     char     length 2         H                 i
 		001100001 01000010 00000010 00000000 01001000 00000000 01101001
 
-The text data _"Hi"_ has **no** type tag before each character.
+Each character is encoded using 2 data bytes (UTF-16). No type tags occur before each character.
 Now if the `char`s are varying, say like for UTF-8 this could be encoded as:
 
 		array     char* 6  length 2 char   1 H        char   1 i
 		001100001 01001110 00000010 01000001 01001000 01000001 01101001
 
-The text now uses `char`s with a _maximum_ of 6 bytes per char. Note also that the `v`arying bit is set (right where the `*` is) to indicate that each element in the array is again type encoded. Here these are both 1 byte long `char`s.
+The text now uses `char`s with a _maximum_ of 6 bytes per char (UTF-8 specific). 
+Note also that the `v`arying bit is set (right where the `*` is) to indicate that each element in the array is again type encoded. Here these are both 1 byte long `char`s.
+
+Arrays that are completely `dynamic` on the other hand a meant to contain different kinds of types as used in dynamically typed languages like javascript or clojure. The following clojure list `(1 "a" -2)` can be encoded as follows:
+
+		array   1 dynamic  length 3 uint   1 1        char   1 a        int    1 -2
+		001100001 00001110 00000011 00100001 00000001 01000001 01100001 00110001 11111110
+
+`dynamic` might also be used to compress uniform arrays of a wide number type that is just filled with small numbers that could be encoded by a single byte. 
 
 
 Motivation
