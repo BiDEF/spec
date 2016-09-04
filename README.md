@@ -172,10 +172,22 @@ In addition the types are thereby unnecessarily repeated.
 Therefore this kind of typing is a *choice* in BiDEF. 
 The default is to not expect dynamic (varying) types for members.
 
+An `array` of `char` (say something like UTF-16 with 2 bytes per char) with one byte for the length of the value has the following type:
+
+		array     char     length 2         H                 i
+		001100001 01000010 00000010 00000000 01001000 00000000 01101001
+
+The text data _"Hi"_ has **no** type tag before each character.
+Now if the `char`s are varying, say like for UTF-8 this could be encoded as:
+
+		array     char* 6  length 2 char   1 H        char   1 i
+		001100001 01001110 00000010 01000001 01001000 01000001 01101001
+
+The text now uses `char`s with a _maximum_ of 6 bytes per char. Note also that the `v`arying bit is set (right where the `*` is) to indicate that each element in the array is again type encoded. Here these are both 1 byte long `char`s.
+
 
 Motivation
 ----------
-
 Hundreds of binary data encodings already exist. 
 None (known to me) provides a solution that in effect
 allows to be precise about the semantics of the data
