@@ -172,26 +172,39 @@ In addition the types are thereby unnecessarily repeated.
 Therefore this kind of typing is a *choice* in BiDEF. 
 The default is to not expect dynamic (varying) types for members.
 
-An `array` of `char` (say something like UTF-16 with 2 bytes per char) with one byte for the length of the value has the following type:
+The text _"Hi"_ encoded using an `array` of `char` (say something like UTF-16 with 2 bytes per char) with one byte for the length of the value looks like this:
 
 		array     char     length 2         H                 i
 		001100001 01000010 00000010 00000000 01001000 00000000 01101001
 
-Each character is encoded using 2 data bytes (UTF-16). No type tags occur before each character.
-Now if the `char`s are varying, say like for UTF-8 this could be encoded as:
+Each character is encoded using 2 data bytes (UTF-16). No type bytes occur before the characters as elements of the array.
+
+If the `char`s are varying, say like for UTF-8, this could be encoded as:
 
 		array     char* 6  length 2 char   1 H        char   1 i
 		001100001 01001110 00000010 01000001 01001000 01000001 01101001
 
-The text now uses `char`s with a _maximum_ of 6 bytes per char (UTF-8 specific). 
-Note also that the `v`arying bit is set (right where the `*` is) to indicate that each element in the array is again type encoded. Here these are both 1 byte long `char`s.
+The `v`arying bit is set (look for `*`) to indicate that each element in the array is a `char` of some sort (width a maxmimum width of 6 bytes per character; this is UTF-8 specific). The exact type is encoded for each value/element.
 
 Arrays that are completely `dynamic` on the other hand a meant to contain different kinds of types as used in dynamically typed languages like javascript or clojure. The following clojure list `(1 "a" -2)` can be encoded as follows:
 
 		array   1 dynamic  length 3 uint   1 1        char   1 a        int    1 -2
 		001100001 00001110 00000011 00100001 00000001 01000001 01100001 00110001 11111110
 
-`dynamic` might also be used to compress uniform arrays of a wide number type that is just filled with small numbers that could be encoded by a single byte. 
+`dynamic` might also be used to compress uniform arrays of a wide number type that are just filled with small numbers that could be encoded by a single byte. 
+
+
+Shared Type Tags
+----------------
+Any type can be tagged with abitrary values. One useage is to _type tag_ values for a particular target languages or standards. This makes the type of a value even more precise so that an decoder knows what kind of value should be constructed from the data.
+
+Shared tags are by convention encoded as `uint` values 
+(for vendor, language or product specific tags use some other type).
+
+The table below shows the meaning of tag values agreed upon so far:
+
+TODO
+
 
 
 Motivation
