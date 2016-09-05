@@ -206,8 +206,15 @@ Shared tags are by convention encoded as `uint` values
 
 The table below shows the meaning of tag values agreed upon so far:
 
-TODO
+TODO table
 
+
+Initial Type Presets
+--------------------
+To save even more type definitions the possible 127 referable types can be predefine by convention.
+If a type if refered to without having defined it in the same conversation it is defined by a commonly agreed preset table.
+
+TODO table
 
 
 Motivation
