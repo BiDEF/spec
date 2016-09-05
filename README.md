@@ -89,6 +89,8 @@ by the type or encoded explicitly as part of the type.
 		|0 001 v bbb| data bytes | data / 1-255 /  |
 		+-----------+------------+======        ===+
 
+The bits `bbb` (0-7) give the number of used bits in the last byte: 1-8 (1 is always added). Bits are used MSB to LSB.  
+
 * `bool` is equal to `bits(1)` what i is encoded as `00010001 0000001`. 
 * the `bits` value for _true_ is `00000001`.
 * the `bits` value for _false_ is `00000000`.
@@ -99,11 +101,15 @@ by the type or encoded explicitly as part of the type.
 		|0 010 v www| data / 1-8 /  |
 		+-----------+======      ===+
 
+The bits `www` (0-7) give the width of the value: 1-8 bytes (1 is always added)
+
 #### Signed Integers
 
 		+-----------+=======      ==+
 		|0 011 v www| data / 1-8 /  |
 		+-----------+======      ===+
+
+The bits `www` (0-7) give the width of the value: 1-8 bytes (1 is always added)
 
 #### Characters
 
@@ -111,11 +117,16 @@ by the type or encoded explicitly as part of the type.
 		|0 100 v www| data / 1-8 /  |
 		+-----------+======      ===+
 
+The bits `www` (0-7) give the width of the value: 1-8 bytes (1 is always added)
+
 #### Decimals
 
 		+-----------+==============      ==+==========+
 		|0 101 v www| coefficient / 0-7 /  | exponent |
 		+-----------+=============      ===+==========+
+
+The bits `www` (0-7) give the width of the value: 1-8 bytes (1 is always added)
+The exponent always uses the last byte. The coefficient uses 0-7 bytes. If the coefficient has no bytes it is 1. 
 
 #### Arrays
 
@@ -143,17 +154,20 @@ by the type or encoded explicitly as part of the type.
 #### Type Reference
 
 		+-----------+
-		|1 rrrrrrr  | (7 bit id)
+		|1 rrrrrrr  | 
 		+-----------+
 
-**Type Definition** (followed by a type without a value!): 
+  Uses the type given by the 7 bit id `rrrrrrr`. If the referenced type is `v`arying or has partial types that are `dynamic` the actual values for these types are stated before the value.
+
+#### Type Definition
 
 		+-----------+-----------+============    ==+
 		|1 1111111  | 0 rrrrrrr |  type def / * /  |
 		+-----------+-----------+===========    ===+
 
-  Defines a type with the given 7-bit id for the **duration of the session**.
-  A type might however be redefined in any message during a session (including the same message that origianlly defined it first). 
+  Defines a type with the given 7-bit id for the **duration of the conversaion**.
+  A type might however be redefined in any message during a conversaion (including the same message that origianlly defined it first). **The defined type has no value**.
+  
   The ids `1xxxxxxx` or `x1111111` should not be used as they cannot be referenced.
   It is however not illegal to do so. The receiver is free to ignore such definitions or do some custom interpretation that might be meaningful between particular senders and receivers.
 
