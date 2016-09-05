@@ -130,11 +130,14 @@ The exponent always uses the last byte. The coefficient uses 0-7 bytes. If the c
 
 #### Arrays
 
-		+-----------+---------------    --+---------      --+=======    ==+
-		|0 110 v lll| element type / * /  | length / 1-8 /  | data / * /  |
-		+-----------+--------------    ---+--------      ---+======    ===+
+		+-----------+---------------    --+=========      ==+===========    ==+
+		|0 110 v lll| element type / * /  | length / 1-8 /  | elements / * /  |
+		+-----------+--------------    ---+========      ===+==========    ===+
 
-  Elements will only have an explicit type if the array is `v`arying or its element type is `dynamic`.
+  The bits `lll` (0-7) give the amount of bytes for the `length` information, 1-8 bytes (1 is always added).
+
+  The `elements` will only have an explicitly stated type if the array is `v`arying or its element type is `dynamic`.
+  Otherwise it is a sequence of values only.
   
   If a `v`arying array type is predefined and later referenced the element type is (re)stated explicitly for each value.
   This allows to change details of the element type like the width or if it is varying.
@@ -142,14 +145,16 @@ The exponent always uses the last byte. The coefficient uses 0-7 bytes. If the c
 #### Records
 
 		+-----------+---------      --+--------------    --+=======    ==+
-		|0 111 v lll| fields / 1-8 /  | field types / * /  | data / * /  |
+		|0 111 v fff| fields / 1-8 /  | field types / * /  | data / * /  |
 		+-----------+--------      ---+-------------    ---+======    ===+
 
+  The bits `fff` (0-7) give the amount of bytes that encode the `fields` count, 1-8 bytes (1 is always added).
+
   When the record type is predefined and later referenced only those fields will have an explicit type that are `v`arying or `dynamic`. 
-  
   If the whole record is `v`arying the field types are not part of the type definition but repeated before each value.
   This is used to as a form of _union_ type.
   
+  To name fields tags are attached to the field types.
 
 #### Type Reference
 
