@@ -1,4 +1,5 @@
-# RAWX - A Flexible Binary Data Exchange Notation
+# Pack-Man
+Packed Message Notation
 
 Design Goals
 ------------
