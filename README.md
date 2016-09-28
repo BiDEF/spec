@@ -1,4 +1,4 @@
-# Pack-Man
+# Pack-Men
 Packed Message Notation
 
 Design Goals
