@@ -1,4 +1,4 @@
-# BiDEF - Binary Data Exchange Format
+# RAWX - A Flexible Binary Data Exchange Notation
 
 Design Goals
 ------------
